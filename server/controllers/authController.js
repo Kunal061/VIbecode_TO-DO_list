@@ -8,6 +8,13 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9a-z]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({
+                message: 'Password must be at least 8 characters long, contain at least one uppercase letter, and one special character (!@#$&*)'
+            });
+        }
+
         let user = await User.findOne({ $or: [{ email }, { username }] });
         if (user) {
             return res.status(400).json({ message: 'User already exists' });
@@ -28,9 +35,12 @@ exports.register = async (req, res) => {
 // @access  Public
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
 
-        const user = await User.findOne({ email });
+        // Check for user identity by email or username
+        const user = await User.findOne({
+            $or: [{ email: identifier }, { username: identifier }]
+        });
         if (!user || !(await user.comparePassword(password))) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }

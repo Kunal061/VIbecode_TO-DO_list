@@ -39,7 +39,7 @@ const TaskForm = ({ onTaskAdded, onTaskUpdated, isOpen, setIsOpen, editTask }) =
             setFormData({ title: '', description: '', status: 'todo' });
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || `Failed to ${editTask ? 'update' : 'add'} task node`);
+            setError(err.response?.data?.message || `Failed to ${editTask ? 'update' : 'add'} task`);
         } finally {
             setLoading(false);
         }
@@ -54,7 +54,7 @@ const TaskForm = ({ onTaskAdded, onTaskUpdated, isOpen, setIsOpen, editTask }) =
                 className="fixed bottom-24 right-24 btn-pill btn-pill-primary px-10 py-5 z-40 border-4 border-[var(--bg-dark)] shadow-2xl"
             >
                 <Plus className="w-6 h-6" />
-                <span className="font-black uppercase tracking-widest text-sm">Add Node</span>
+                <span className="font-black uppercase tracking-widest text-sm">Add Task</span>
             </motion.button>
 
             <AnimatePresence>
@@ -85,10 +85,10 @@ const TaskForm = ({ onTaskAdded, onTaskUpdated, isOpen, setIsOpen, editTask }) =
                             <div className="mb-24">
                                 <h2 className="text-6xl font-black uppercase tracking-tighter leading-none mb-4">
                                     {editTask ? 'Configure' : 'Initialize'} <br />
-                                    <span className="text-[var(--accent)]">Node</span>
+                                    <span className="text-[var(--accent)]">Task</span>
                                 </h2>
                                 <p className="text-xs font-bold uppercase tracking-[0.3em] opacity-30">
-                                    {editTask ? 'Update existing project component' : 'Configure new project component'}
+                                    {editTask ? 'Update existing task' : 'Configure new task'}
                                 </p>
                             </div>
 
@@ -100,25 +100,25 @@ const TaskForm = ({ onTaskAdded, onTaskUpdated, isOpen, setIsOpen, editTask }) =
 
                             <form onSubmit={handleSubmit} className="space-y-16 flex-1">
                                 <div className="space-y-6">
-                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">System Title</label>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Task Name</label>
                                     <input
                                         type="text"
                                         required
                                         value={formData.title}
                                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                         className="input-arch text-4xl"
-                                        placeholder="NODE_NAME.EXE"
+                                        placeholder="Task Name"
                                     />
                                 </div>
 
                                 <div className="space-y-6">
-                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Technical Notes</label>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Any notes to add to task</label>
                                     <textarea
                                         rows="6"
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                         className="input-arch resize-none"
-                                        placeholder="Define core objectives and parameters..."
+                                        placeholder="Any notes to add to task..."
                                     />
                                 </div>
 

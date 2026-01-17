@@ -5,7 +5,7 @@ import { Mail, Lock, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({ identifier: '', password: '' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const { login } = useAuth();
@@ -52,16 +52,16 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-12">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Identity (Email)</label>
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Identity (Email or Username)</label>
                         <input
-                            type="email"
-                            name="email"
-                            autoComplete="email"
+                            type="text"
+                            name="identifier"
+                            autoComplete="username"
                             required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            value={formData.identifier}
+                            onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
                             className="input-arch"
-                            placeholder="USER@DOMAIN.COM"
+                            placeholder="USERNAME or EMAIL"
                         />
                     </div>
 

@@ -45,13 +45,13 @@ const TaskList = () => {
     };
 
     const handleTaskDeleted = async (id) => {
-        if (!window.confirm('Terminate this task node?')) return;
+        if (!window.confirm('Terminate this task?')) return;
         try {
             await taskService.deleteTask(id);
             setTasks(prev => prev.filter(t => t._id !== id));
             setActionError(null);
         } catch (err) {
-            setActionError('Failed to delete task node');
+            setActionError('Failed to delete task');
         }
     };
 
@@ -61,7 +61,7 @@ const TaskList = () => {
             setTasks(prev => prev.map(t => t._id === id ? data : t));
             setActionError(null);
         } catch (err) {
-            setActionError('Failed to update task node');
+            setActionError('Failed to update task');
         }
     };
 
@@ -69,7 +69,7 @@ const TaskList = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen arch-grid">
                 <Loader2 className="w-8 h-8 animate-spin text-[var(--accent)]" />
-                <p className="mt-4 text-[10px] uppercase font-bold tracking-widest opacity-40">Initializing Nodes...</p>
+                <p className="mt-4 text-[10px] uppercase font-bold tracking-widest opacity-40">Initializing Tasks...</p>
             </div>
         );
     }
@@ -124,11 +124,22 @@ const TaskList = () => {
                             }}
                             className="btn-pill btn-pill-outline text-xs uppercase tracking-widest"
                         >
-                            Initialize First Node
+                            Initialize First Task
                         </button>
                     </motion.div>
                 ) : (
                     <motion.div
+                        variants={{
+                            hidden: { opacity: 0 },
+                            show: {
+                                opacity: 1,
+                                transition: {
+                                    staggerChildren: 0.1
+                                }
+                            }
+                        }}
+                        initial="hidden"
+                        animate="show"
                         layout
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-l border-t border-white/5"
                     >

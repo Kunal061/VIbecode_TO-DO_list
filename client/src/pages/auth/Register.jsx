@@ -11,10 +11,22 @@ const Register = () => {
     const { register } = useAuth();
     const navigate = useNavigate();
 
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9a-z]).{8,}$/;
+        return regex.test(password);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
+
+        if (!validatePassword(formData.password)) {
+            setError('Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.');
+            setLoading(false);
+            return;
+        }
+
         try {
             await register(formData);
             navigate('/');

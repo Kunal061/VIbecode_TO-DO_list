@@ -1,9 +1,20 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const Hero = () => {
+    const [index, setIndex] = useState(0);
+    const texts = ["TO-DO LIST", "कार्य सूची"];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % texts.length);
+        }, 3000); // Change every 3 seconds
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section className="relative min-h-screen flex flex-col justify-center arch-grid overflow-hidden pt-32">
             <div className="px-12">
@@ -18,8 +29,23 @@ const Hero = () => {
                     </div>
 
                     <h1 className="mega-text">
-                        Architecting <br />
-                        <span className="text-white/20">Production</span>
+                        USER-Based <br />
+                        <div className="h-[1em] relative overflow-hidden">
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={index}
+                                    initial={{ y: 50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -50, opacity: 0 }}
+                                    transition={{ duration: 0.5, ease: "circOut" }}
+                                    className="text-white/20 block absolute top-0 left-0"
+                                >
+                                    {texts[index]}
+                                </motion.span>
+                            </AnimatePresence>
+                            {/* Invisible spacer to maintain height */}
+                            <span className="opacity-0">{texts[0]}</span>
+                        </div>
                     </h1>
 
                     <div className="flex items-center gap-12 mt-12 pb-24 border-b border-white/5">
@@ -31,9 +57,7 @@ const Hero = () => {
                                 <span>Get Started</span>
                                 <ArrowRight className="w-4 h-4" />
                             </Link>
-                            <Link to="/login" className="btn-pill btn-pill-outline">
-                                <span>View Demo</span>
-                            </Link>
+
                         </div>
                     </div>
                 </motion.div>
