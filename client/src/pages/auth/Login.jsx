@@ -1,0 +1,101 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
+import { Mail, Lock, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+
+const Login = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await login(formData);
+            navigate('/');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to login');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <section className="min-h-screen arch-grid flex items-center justify-center p-12">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-xl bg-[var(--bg-dark)] border border-white/10 p-16 relative"
+            >
+                <div className="absolute top-0 right-0 p-8">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-30">Auth Node 01</span>
+                </div>
+
+                <div className="mb-12">
+                    <h1 className="text-6xl font-black uppercase tracking-tighter mb-4">
+                        System <br />
+                        <span className="text-[var(--accent)]">Entry</span>
+                    </h1>
+                    <p className="text-xs font-bold uppercase tracking-widest opacity-40">Initialize your session to continue</p>
+                </div>
+
+                {error && (
+                    <div className="mb-8 p-4 border-l-4 border-[var(--accent)] bg-white/5 text-[var(--accent)] text-xs font-bold uppercase tracking-widest">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-12">
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Identity (Email)</label>
+                        <input
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className="input-arch"
+                            placeholder="USER@DOMAIN.COM"
+                        />
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Access Key (Password)</label>
+                        <input
+                            type="password"
+                            name="password"
+                            autoComplete="current-password"
+                            required
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            className="input-arch"
+                            placeholder="••••••••"
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-6 pt-4">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="btn-pill btn-pill-primary w-full justify-center text-sm uppercase tracking-widest py-4"
+                        >
+                            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Authorize Access'}
+                        </button>
+
+                        <Link to="/register" className="text-center text-[10px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+                            Request New Access Node? <span className="text-[var(--accent)] ml-2">Register</span>
+                        </Link>
+                    </div>
+                </form>
+            </motion.div>
+        </section>
+    );
+};
+
+export default Login;
